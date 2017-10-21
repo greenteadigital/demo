@@ -1,45 +1,87 @@
 # -*- coding: UTF-8 -*-
 
 import sqlite3
-from flask import Flask, g  # g = Flask.globals
-app = Flask(__name__)
+from flask import g as flask_global
+import os.path
 
-DATABASE = 'demo.sqlite'
 
-def make_dicts(cursor, row):
-    return dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    db.row_factory = make_dicts
-    return db
+class DBAccess(object):
 
-def query_db(query, args=(), single=False):
-    curs = get_db().execute(query, args)
-    results = curs.fetchall()
-    curs.close()
-    return (results[0] if results else None) if single else results
 
-def init_db():
-    with app.app_context():
-        db = get_db()
-        with app.open_resource('demo.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
-
-def get_catalog():
-    return query_db('''
-    SELECT ap.title,
-      ap.version,
-      au.name AS author,
-      au.email,
-      au.company
-    FROM app ap,
-      author au,
-      app_author aa
-    WHERE ap.appid = aa.appid
-    AND aa.authorid = au.authorid
-    ORDER BY ap.title ASC''')
-
+    def __init__(self, app = None, schema = '', database = ''):
+        self.app = app
+        self.schema = schema
+        self.database = database
+        if not os.path.exists(database):
+            self.init_db()
+    
+    def init_db(self):
+        with self.app.app_context():
+            db = self.get_db()
+            with self.app.open_resource(self.schema, mode='r') as f:
+                db.cursor().executescript(f.read())
+            db.commit()
+    
+    def dict_factory(self, cursor, row):
+        return dict((cursor.description[idx][0], value)
+                    for idx, value in enumerate(row))
+        
+    def get_db(self):
+        db = getattr(flask_global, '_database', None)
+        if db is None:
+            db = flask_global._database = sqlite3.connect(self.database)
+        db.row_factory = self.dict_factory
+        return db 
+    
+    def query_db(self, query, args=(), single=False):
+        curs = self.get_db().execute(query, args)
+        results = curs.fetchall()
+        curs.close()
+        return (results[0] if results else None) if single else results
+    
+    def get_catalog(self):
+        return self.query_db('''
+        SELECT ap.title,
+          ap.version,
+          au.name AS author,
+          au.email,
+          au.company
+        FROM app ap,
+          author au,
+          app_author aa
+        WHERE ap.appid = aa.appid
+        AND aa.authorid = au.authorid
+        ORDER BY ap.title ASC''')
+    
+    def add_app(self, _map):
+        
+        with self.get_db() as conn:
+            try:
+                conn.isolation_level = None
+                curs = conn.cursor()                
+                
+                curs.execute("BEGIN TRANSACTION")
+                curs.execute("insert into app (title, version) values (?, ?)",
+                             (_map['title'], _map['version']))
+                
+                curs.execute("insert into author (name, email, company) values (?, ?, ?)",
+                             (_map['author'], _map['email'], _map['company']))
+                
+                curs.execute("""insert into app_author (appid, authorid) values (
+                    (SELECT last_insert_rowid() FROM app),
+                    (SELECT last_insert_rowid() FROM author) )""")
+                
+                curs.execute("COMMIT")
+            
+            except conn.Error:
+                print 'Caught error, rolling back'
+                curs.execute("ROLLBACK")
+    
+    def edit_app(self):
+        pass
+        
+        
+        
+        
+        
+#EOF        

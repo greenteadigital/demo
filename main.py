@@ -1,18 +1,36 @@
 # -*- coding: UTF-8 -*-
-# pip install flask
+# run pip install flask
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, abort
 import dao
 import os
+
 app = Flask(__name__)
 
-if not os.path.exists(dao.DATABASE):
-    dao.init_db()
-
+db = dao.DBAccess(app = app, schema='demo.sql', database='demo.sqlite')
+    
 @app.route('/demo')
 def home():
-        
-    return render_template('index.html', apps = dao.get_catalog())
+    return render_template('index.html', apps = db.get_catalog())
+
+
+@app.route('/demo/create', methods=['POST'])
+def add_new():
+
+    if request.form['title'] in ('', None):
+        abort(400)
+    else:
+        params = {}
+        for key in ('title','company','version','email','author'):
+            params[key] = request.form[key]
+        db.add_app(params)    
+    
+        return redirect('/demo', code=302)
+
+@app.route('/demo/edit', methods=['POST'])
+def edit_app():
+    pass
 
 if __name__ == '__main__':
     app.run()
+    ''' Now visit http://127.0.0.1:5000/demo '''
