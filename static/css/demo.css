@@ -15,3 +15,12 @@ body {
 	background-image:url(/static/img/hdr-bg.jpg);
 	text-shadow: 0 0 10px white;
 }
+.edit-icon {
+	float: right;
+	cursor: pointer;
+	font-size:130%;
+	color:gray;
+}
+.edit-icon:hover {
+	color:black;
+}

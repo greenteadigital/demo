@@ -5,8 +5,15 @@ $(document).on('ready', function () {
 	});
 	
 	$('.add-app').on('click', function() {
-		
+		$('input.form-control').val(null);
 	});
 	
 	$('.app-table').DataTable();
+	
+	$('[data-toggle=tooltip]').tooltip({
+	    selector: '',
+	    placement: 'left',
+	    container:'body'
+	  });
+
 });

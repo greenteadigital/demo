@@ -29,7 +29,20 @@ def add_new():
 
 @app.route('/demo/edit', methods=['POST'])
 def edit_app():
-    pass
+    
+    appid = request.form['appid']
+    
+    if request.form['title-' + appid] in ('', None):
+        abort(400)
+    else:
+        
+        params = {}
+        for key in map(lambda s: s + '-' + appid, ['title','company','version','email','author']) + ['appid','authorid']:
+            params[key.rstrip('-' + appid)] = request.form[key]
+        
+        db.update_app(params)
+    
+        return redirect('/demo', code=302)
 
 if __name__ == '__main__':
     app.run()

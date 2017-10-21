@@ -41,8 +41,10 @@ class DBAccess(object):
     
     def get_catalog(self):
         return self.query_db('''
-        SELECT ap.title,
+        SELECT ap.appid,
+          ap.title,
           ap.version,
+          au.authorid,
           au.name AS author,
           au.email,
           au.company
@@ -77,11 +79,24 @@ class DBAccess(object):
                 print 'Caught error, rolling back'
                 curs.execute("ROLLBACK")
     
-    def edit_app(self):
-        pass
-        
-        
-        
+    def update_app(self, _map):
+        with self.get_db() as conn:
+            try:
+                conn.isolation_level = None
+                curs = conn.cursor()                
+                
+                curs.execute("BEGIN TRANSACTION")
+                curs.execute("update app set title=?, version=? where appid=?",
+                             (_map['title'], _map['version'], _map['appid']))
+                
+                curs.execute("update author set name=?, email=?, company=? where authorid=?",
+                             (_map['author'], _map['email'], _map['company'], _map['authorid']))
+                
+                curs.execute("COMMIT")
+            
+            except conn.Error:
+                print 'Caught error, rolling back'
+                curs.execute("ROLLBACK")
         
         
 #EOF        
