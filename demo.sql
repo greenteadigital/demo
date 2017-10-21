@@ -18,7 +18,7 @@ CREATE TABLE author
 --APP to AUTHOR lookup, supports many to many
 CREATE TABLE app_author
   (
-  	appid INTEGER,
+    appid INTEGER,
     authorid INTEGER
   );
 
