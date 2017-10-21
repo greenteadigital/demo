@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import sqlite3
-from flask import Flask, g
+from flask import Flask, g  # g = Flask.globals
 app = Flask(__name__)
 
 DATABASE = 'demo.sqlite'
@@ -29,10 +29,11 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-def getAllApps():
-    
-    sql = '''SELECT ap.title,
+def get_catalog():
+    return query_db('''
+    SELECT ap.title,
       ap.version,
+      au.name AS author,
       au.email,
       au.company
     FROM app ap,
@@ -40,7 +41,5 @@ def getAllApps():
       app_author aa
     WHERE ap.appid = aa.appid
     AND aa.authorid = au.authorid
-    ORDER BY ap.title ASC'''
-    
-    return query_db(sql)
+    ORDER BY ap.title ASC''')
 

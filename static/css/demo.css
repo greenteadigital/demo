@@ -1,0 +1,17 @@
+body {
+	font:size:15px;
+}
+.yay, .add-app {
+	position: relative;
+}
+.yay {
+	top:14px;
+}
+.add-app {
+	top: 21px;
+	left: 16px;
+}
+.jumbotron {
+	background-image:url(/static/img/hdr-bg.jpg);
+	text-shadow: 0 0 10px white;
+}

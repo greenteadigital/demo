@@ -12,7 +12,7 @@ if not os.path.exists(dao.DATABASE):
 @app.route('/demo')
 def home():
         
-    return render_template('index.html', apps = dao.getAllApps())
+    return render_template('index.html', apps = dao.get_catalog())
 
 if __name__ == '__main__':
     app.run()
