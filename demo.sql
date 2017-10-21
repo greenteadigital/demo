@@ -10,7 +10,7 @@ CREATE TABLE app
 CREATE TABLE author
   (
     authorid INTEGER PRIMARY KEY AUTOINCREMENT,
-    name		VARCHAR2(64),
+    name	     VARCHAR2(64),
     email    VARCHAR2(64),
     company  VARCHAR2(64)
   );
