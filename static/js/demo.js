@@ -5,7 +5,7 @@ $(document).on('ready', function () {
 	});
 	
 	$('.add-app').on('click', function() {
-		$('input.form-control').val(null);
+		$('input.add-form').val(null);
 	});
 	
 	$('.app-table').DataTable();
