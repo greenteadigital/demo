@@ -3,7 +3,6 @@
 
 from flask import Flask, render_template, request, redirect, abort
 import dao
-import os
 
 app = Flask(__name__)
 
@@ -11,12 +10,15 @@ db = dao.DBAccess(app = app, schema='demo.sql', database='demo.sqlite')
     
 @app.route('/demo')
 def home():
+    ''' Display the home page, the app catalog '''
+    
     return render_template('index.html', apps = db.get_catalog())
 
 
 @app.route('/demo/create', methods=['POST'])
 def add_new():
-
+    ''' Process POST from Add Application form '''
+    
     if request.form['title'].strip() in ('', None):
         abort(400)
     else:
@@ -29,6 +31,7 @@ def add_new():
 
 @app.route('/demo/edit', methods=['POST'])
 def edit_app():
+    ''' Process POST from Edit Application form '''
     
     appid = request.form['appid']
     
