@@ -17,7 +17,7 @@ def home():
 @app.route('/demo/create', methods=['POST'])
 def add_new():
 
-    if request.form['title'] in ('', None):
+    if request.form['title'].strip() in ('', None):
         abort(400)
     else:
         params = {}
@@ -32,7 +32,7 @@ def edit_app():
     
     appid = request.form['appid']
     
-    if request.form['title-' + appid] in ('', None):
+    if request.form['title-' + appid].strip() in ('', None):
         abort(400)
     else:
         

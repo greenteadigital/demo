@@ -5,7 +5,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-		<title>Application Catalog</title>
+		<title>Ben Hall &#x26a1; App Catalog</title>
+		<link rel="icon" href="/static/img/favicon.ico">
 		
 		<!-- Bootstrap -->
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -78,27 +79,27 @@
 								<form class="new-app-form" method="POST" action="/demo/edit">
 									<div class="form-group">
 										<label>Title</label>
-										<input type="text" name="title-{{app.appid}}" class="form-control edit-app" placeholder="App Title" value="{{app.title}}" required/>
+										<input maxlength="128" type="text" name="title-{{app.appid}}" class="form-control edit-app" placeholder="App Title" value="{{app.title}}" required/>
 									</div>
 									
 									<div class="form-group">
 										<label>Version</label>
-										<input type="text" name="version-{{app.appid}}" class="form-control edit-app" placeholder="Version" value="{{app.version}}"/>
+										<input maxlength="64" type="text" name="version-{{app.appid}}" class="form-control edit-app" placeholder="Version" value="{{app.version}}"/>
 									</div>
 									
 									<div class="form-group">
 										<label>Author</label>
-										<input type="text" name="author-{{app.appid}}" class="form-control edit-app" placeholder="Author" value="{{app.author}}"/>
+										<input maxlength="64" type="text" name="author-{{app.appid}}" class="form-control edit-app" placeholder="Author" value="{{app.author}}"/>
 									</div>
 									
 									<div class="form-group">
 										<label>Company</label>
-										<input type="text" name="company-{{app.appid}}" class="form-control edit-app" placeholder="Company" value="{{app.company}}"/>
+										<input maxlength="64" type="text" name="company-{{app.appid}}" class="form-control edit-app" placeholder="Company" value="{{app.company}}"/>
 									</div>
 									
 									<div class="form-group">
 										<label>Email</label>
-										<input type="email" name="email-{{app.appid}}" class="form-control edit-app" placeholder="Email address" value="{{app.email}}"/>
+										<input maxlength="64" type="email" name="email-{{app.appid}}" class="form-control edit-app" placeholder="Email address" value="{{app.email}}"/>
 									</div>
 									<input type="hidden" name="appid" value="{{app.appid}}">
 									<input type="hidden" name="authorid" value="{{app.authorid}}">
@@ -125,27 +126,27 @@
 							<form class="new-app-form" method="POST" action="/demo/create">
 								<div class="form-group">
 									<label>Title</label>
-									<input type="text" name="title" class="form-control add-form" placeholder="App Title" required/>
+									<input maxlength="128" type="text" name="title" class="form-control add-form" placeholder="App Title" required/>
 								</div>
 								
 								<div class="form-group">
 									<label>Version</label>
-									<input type="text" name="version" class="form-control add-form" placeholder="Version"/>
+									<input maxlength="64" type="text" name="version" class="form-control add-form" placeholder="Version"/>
 								</div>
 								
 								<div class="form-group">
 									<label>Author</label>
-									<input type="text" name="author" class="form-control add-form" placeholder="Author"/>
+									<input maxlength="64" type="text" name="author" class="form-control add-form" placeholder="Author"/>
 								</div>
 								
 								<div class="form-group">
 									<label>Company</label>
-									<input type="text" name="company" class="form-control add-form" placeholder="Company"/>
+									<input maxlength="64" type="text" name="company" class="form-control add-form" placeholder="Company"/>
 								</div>
 								
 								<div class="form-group">
 									<label>Email</label>
-									<input type="email" name="email" class="form-control add-form" placeholder="Email address"/>
+									<input maxlength="64" type="email" name="email" class="form-control add-form" placeholder="Email address"/>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
