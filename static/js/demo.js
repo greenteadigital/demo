@@ -14,6 +14,5 @@ $(document).on('ready', function () {
 	    selector: '',
 	    placement: 'left',
 	    container:'body'
-	  });
-
+	});
 });

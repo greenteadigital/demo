@@ -35,11 +35,9 @@ def edit_app():
     if request.form['title-' + appid].strip() in ('', None):
         abort(400)
     else:
-        
         params = {}
         for key in map(lambda s: s + '-' + appid, ['title','company','version','email','author']) + ['appid','authorid']:
             params[key.rstrip('-' + appid)] = request.form[key]
-        
         db.update_app(params)
     
         return redirect('/demo', code=302)
