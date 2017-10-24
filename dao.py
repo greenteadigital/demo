@@ -6,7 +6,7 @@ import os.path
 
 
 class DBAccess(object):
-    ''' Class which provides DB access ops. Connect, query, etc. '''
+    ''' Class which provides DB access ops. Connect, query, etc. Creates DB if not already exists.'''
 
     def __init__(self, app = None, schema = '', database = ''):
         self.app = app
@@ -16,7 +16,7 @@ class DBAccess(object):
             self.init_db()
     
     def init_db(self):
-        ''' Creates the sqlite DB from provided schema if not already exists. '''
+        ''' Creates the sqlite DB from provided schema. '''
         
         with self.app.app_context():
             db = self.get_db()
