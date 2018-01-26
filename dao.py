@@ -47,26 +47,25 @@ class DBAccess(object):
         curs.close()
         return (results[0] if results else None) if single else results
     
-    def get_catalog(self):
-        ''' Get the list of applications in the catalog '''
+    def get_tasks(self):
+        ''' Get the list of tasks on the list '''
         
         return self.query_db('''
-        SELECT ap.appid,
-          ap.title,
-          ap.version,
+        SELECT t.taskid,
+          t.title,
+          t.description,
           au.authorid,
           au.name AS author,
-          au.email,
-          au.company
-        FROM app ap,
+          au.email
+        FROM task t,
           author au,
-          app_author aa
-        WHERE ap.appid = aa.appid
+          task_author aa
+        WHERE t.taskid = aa.taskid
         AND aa.authorid = au.authorid
-        ORDER BY ap.title ASC''')
+        ORDER BY t.title ASC''')
     
-    def add_app(self, _map):
-        ''' Adds a new application to the catalog '''
+    def add_task(self, _map):
+        ''' Adds a new task to the list'''
         
         with self.get_db() as conn:
             try:
@@ -74,14 +73,14 @@ class DBAccess(object):
                 curs = conn.cursor()                
                 
                 curs.execute("BEGIN TRANSACTION")
-                curs.execute("insert into app (title, version) values (?, ?)",
-                             (_map['title'], _map['version']))
+                curs.execute("insert into task (title, description) values (?, ?)",
+                             (_map['title'], _map['description']))
                 
-                curs.execute("insert into author (name, email, company) values (?, ?, ?)",
-                             (_map['author'], _map['email'], _map['company']))
+                curs.execute("insert into author (name, email) values (?, ?)",
+                             (_map['author'], _map['email']))
                 
-                curs.execute("""insert into app_author (appid, authorid) values (
-                    (SELECT last_insert_rowid() FROM app),
+                curs.execute("""insert into task_author (taskid, authorid) values (
+                    (SELECT last_insert_rowid() FROM task),
                     (SELECT last_insert_rowid() FROM author) )""")
                 
                 curs.execute("COMMIT")
@@ -90,8 +89,8 @@ class DBAccess(object):
                 print 'Caught error, rolling back'
                 curs.execute("ROLLBACK")
     
-    def update_app(self, _map):
-        ''' Modifies an existing application's details '''
+    def update_task(self, _map):
+        ''' Modifies an existing task's details '''
         
         with self.get_db() as conn:
             try:
@@ -99,11 +98,11 @@ class DBAccess(object):
                 curs = conn.cursor()                
                 
                 curs.execute("BEGIN TRANSACTION")
-                curs.execute("update app set title=?, version=? where appid=?",
-                             (_map['title'], _map['version'], _map['appid']))
+                curs.execute("update task set title=?, description=? where taskid=?",
+                             (_map['title'], _map['description'], _map['taskid']))
                 
-                curs.execute("update author set name=?, email=?, company=? where authorid=?",
-                             (_map['author'], _map['email'], _map['company'], _map['authorid']))
+                curs.execute("update author set name=?, email=? where authorid=?",
+                             (_map['author'], _map['email'], _map['authorid']))
                 
                 curs.execute("COMMIT")
             

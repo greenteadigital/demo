@@ -8,43 +8,43 @@ app = Flask(__name__)
 
 db = dao.DBAccess(app = app, schema='demo.sql', database='demo.sqlite')
     
-@app.route('/demo')
+@app.route('/to-do')
 def home():
     ''' Display the home page, the app catalog '''
     
-    return render_template('index.html', apps = db.get_catalog())
+    return render_template('index.html', tasks = db.get_tasks())
 
 
-@app.route('/demo/create', methods=['POST'])
+@app.route('/to-do/create', methods=['POST'])
 def add_new():
-    ''' Process POST from Add Application form '''
+    ''' Process POST from Add Task form '''
     
     if request.form['title'].strip() in ('', None):
         abort(400)
     else:
         params = {}
-        for key in ('title','company','version','email','author'):
+        for key in ('title','description','email','author'):
             params[key] = request.form[key]
-        db.add_app(params)    
+        db.add_task(params)    
     
-        return redirect('/demo', code=302)
+        return redirect('/to-do', code=302)
 
-@app.route('/demo/edit', methods=['POST'])
-def edit_app():
-    ''' Process POST from Edit Application form '''
+@app.route('/to-do/edit', methods=['POST'])
+def edit_task():
+    ''' Process POST from Edit Task form '''
     
-    appid = request.form['appid']
+    taskid = request.form['taskid']
     
-    if request.form['title-' + appid].strip() in ('', None):
+    if request.form['title-' + taskid].strip() in ('', None):
         abort(400)
     else:
         params = {}
-        for key in map(lambda s: s + '-' + appid, ['title','company','version','email','author']) + ['appid','authorid']:
-            params[key.rstrip('-' + appid)] = request.form[key]
-        db.update_app(params)
+        for key in map(lambda s: s + '-' + taskid, ['title','description','email','author']) + ['taskid','authorid']:
+            params[key.rstrip('-' + taskid)] = request.form[key]
+        db.update_task(params)
     
-        return redirect('/demo', code=302)
+        return redirect('/to-do', code=302)
 
 if __name__ == '__main__':
     app.run()
-    ''' Now visit http://127.0.0.1:5000/demo '''
+    ''' Now visit http://127.0.0.1:5000/to-do '''

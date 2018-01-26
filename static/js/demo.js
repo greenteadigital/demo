@@ -4,11 +4,11 @@ $(document).on('ready', function () {
 		alert('Yay! You\'re here!')
 	});
 	
-	$('.add-app').on('click', function() {
+	$('.add-task').on('click', function() {
 		$('input.add-form').val(null);
 	});
 	
-	$('.app-table').DataTable();
+	$('.task-table').DataTable();
 	
 	$('[data-toggle=tooltip]').tooltip({
 	    selector: '',
